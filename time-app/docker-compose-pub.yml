@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  frontend:
+    image: ilysharusher/time-app-frontend-dev
+    ports:
+      - '3000:3000'
+  backend:
+    image: ilysharusher/time-app-backend-dev
+    ports:
+      - '5555:5000'
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: '3306'
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: time_db
+    restart: always
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: time_db
+    volumes:
+      - mysql_data_pub:/var/lib/mysql
+    restart: always
+  adminer:
+    image: adminer
+    ports:
+      - '8888:8080'
+    restart: always
+
+volumes:
+  mysql_data_pub:
